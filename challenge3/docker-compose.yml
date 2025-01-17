@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flask-app:v2
+    container_name: flask_web
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+    networks:
+      - web_network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - web_network
+
+networks:
+  web_network:
+

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Flask app without database
+  flask_no_db:
+    build:
+      context: ./app_1
+    container_name: flask_no_db
+    networks:
+      - web_network
+    ports:
+      - "5001:5000"  # Expose port 5001 on the host
+
+  # Flask app with database
+  flask_with_db:
+    build:
+      context: ./app_2
+    container_name: flask_with_db
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+    networks:
+      - web_network
+    depends_on:
+      - mongodb
+    ports:
+      - "5002:5000"  # Expose port 5002 on the host
+
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - web_network
+
+  # NGINX Load Balancer
+  nginx:
+    image: nginx:latest
+    container_name: nginx_lb
+    ports:
+      - "80:80"  # Expose port 80 on the host
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - web_network
+
+networks:
+  web_network:
