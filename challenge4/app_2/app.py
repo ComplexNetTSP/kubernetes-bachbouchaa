@@ -6,7 +6,7 @@ import socket
 app = Flask(__name__)
 
 # MongoDB Configuration
-client = MongoClient("mongodb://mongodb:27017/")  # Connect to MongoDB service
+client = MongoClient("mongodb://mongodb-service:27017/")  # Connect to MongoDB service
 db = client['webapp_db']
 collection = db['requests']
 
