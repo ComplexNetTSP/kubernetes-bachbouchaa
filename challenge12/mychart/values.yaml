@@ -1,0 +1,45 @@
+webdb:
+  image: bachboucha/challenge4-flask_with_db
+  replicas: 3
+  service:
+    port: 5000
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+
+webnodb:
+  image: bachboucha/challenge4-flask_no_db
+  replicas: 2
+  service:
+    port: 5000
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+
+mongodb:
+  image: mongo:latest
+  service:
+    port: 27017
+  storage: 0.1Gi
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+
+
+
+ingress:
+  hostnames:
+    - webnodb.nbacha.net4255.luxbulb.org
+    - webdb.nbacha.net4255.luxbulb.org

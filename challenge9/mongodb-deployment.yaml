@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  replicas: 1  # Only one MongoDB instance (no replica sets in this setup)
+  selector:
+    matchLabels:
+      app: mongodb  # Ensure pods match this label
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:latest  # Official MongoDB image from DockerHub
+        ports:
+        - containerPort: 27017  # Port exposed by the MongoDB container
+        resources:
+          requests:  # Minimum resources Kubernetes guarantees for the pod
+            memory: "100Mi"  # Minimum 100 MB of memory requested
+            cpu: "100m"      # Minimum 1/10th of a CPU core requested
+          limits:  # Maximum resources Kubernetes will allow for the pod
+            memory: "200Mi"  # Maximum 200 MB of memory allowed
+            cpu: "200m"      # Maximum 1/5th of a CPU core allowed
+        livenessProbe:
+          tcpSocket:  # Define a TCP probe to check connectivity
+            port: 27017  # Port to check the MongoDB connection
+          initialDelaySeconds: 10  # Wait 10 seconds before starting the probe to allow MongoDB to initialize
+          periodSeconds: 10        # Probe every 10 seconds
+          timeoutSeconds: 5        # Timeout if no response is received in 5 seconds
+          failureThreshold: 3      # Restart the container after 3 consecutive probe failures

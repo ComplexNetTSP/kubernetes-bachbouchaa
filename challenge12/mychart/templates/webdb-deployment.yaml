@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdb
+  namespace: nbacha
+  labels:
+    app: webdb
+spec:
+  replicas: {{ .Values.webdb.replicas }}
+  selector:
+    matchLabels:
+      app: webdb
+  template:
+    metadata:
+      labels:
+        app: webdb
+    spec:
+      containers:
+      - name: webdb
+        image: {{ .Values.webdb.image }}
+        ports:
+        - containerPort: {{ .Values.webdb.service.port }}
+        env:
+        - name: MONGODB_USERNAME
+          value: "admin"
+        - name: MONGODB_PASSWORD
+          value: "password"
+        - name: MONGODB_HOST
+          value: "mongodb-headless"
+        - name: MONGODB_PORT
+          value: "27017"
+        resources:
+          requests:
+            memory: {{ .Values.webdb.resources.requests.memory }}
+            cpu: {{ .Values.webdb.resources.requests.cpu }}
+          limits:
+            memory: {{ .Values.webdb.resources.limits.memory }}
+            cpu: {{ .Values.webdb.resources.limits.cpu }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webdb
+  namespace: nbacha
+  labels:
+    app: webdb
+spec:
+  selector:
+    app: webdb  # Must match the labels in the deployment
+  ports:
+  - protocol: TCP
+    port: 5000        # External port exposed by the service
+    targetPort: 5000  # Port on the container
+  type: ClusterIP

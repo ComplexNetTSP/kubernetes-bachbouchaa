@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  namespace: nbacha
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: webnodb.nbacha.net4255.luxbulb.org  # Route traffic to webnodb
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webnodb  # Service name for webnodb
+            port:
+              number: 5000
+  - host: webdb.nbacha.net4255.luxbulb.org  # Route traffic to webdb
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webdb  # Service name for webdb
+            port:
+              number: 5000

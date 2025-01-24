@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdb
+  labels:
+    app: webdb
+spec:
+  replicas: 3  # Number of replicas (instances) of the web server
+  selector:
+    matchLabels:
+      app: webdb  # Ensure pods match this label
+  template:
+    metadata:
+      labels:
+        app: webdb
+    spec:
+      containers:
+      - name: webdb
+        image: bachboucha/challenge4-flask_with_db  # Docker image for the Flask app
+        ports:
+        - containerPort: 5000  # Port exposed by the container
+        resources:
+          requests:  # Minimum resources Kubernetes guarantees for the pod
+            memory: "100Mi"  # Minimum 100 MB of memory requested
+            cpu: "100m"      # Minimum 1/10th of a CPU core requested
+          limits:  # Maximum resources Kubernetes will allow for the pod
+            memory: "200Mi"  # Maximum 200 MB of memory allowed
+            cpu: "200m"      # Maximum 1/5th of a CPU core allowed
+        livenessProbe:
+          httpGet:  # Define an HTTP probe
+            path: /  # Endpoint to check the health of the Flask app
+            port: 5000  # Port to send the HTTP request to
+          initialDelaySeconds: 10  # Wait 10 seconds before starting the probe to allow the app to initialize
+          periodSeconds: 5         # Probe every 5 seconds
+          timeoutSeconds: 2        # Timeout if no response is received in 2 seconds
+          failureThreshold: 3      # Restart the container after 3 consecutive probe failures

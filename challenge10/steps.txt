@@ -1,0 +1,4 @@
+kubectl apply -f .
+kubectl get deployments,svc --namespace=nbacha
+http://webdb.nbacha.net4255.luxbulb.org/
+http://webnodb.nbacha.net4255.luxbulb.org/
