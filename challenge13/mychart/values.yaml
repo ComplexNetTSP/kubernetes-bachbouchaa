@@ -1,5 +1,5 @@
 webdb:
-  image: bachboucha/challenge4-flask_with_db
+  image: bachboucha/challenge13-webdb:v1.2
   replicas: 3
   service:
     port: 5000
@@ -10,9 +10,12 @@ webdb:
     limits:
       memory: "200Mi"
       cpu: "200m"
+  environment:
+    MONGODB_HOST: "mongodb-0.mongodb.nbacha.svc.cluster.local"  # Updated for headless service
+    MONGODB_PORT: "27017"
 
 webnodb:
-  image: bachboucha/challenge4-flask_no_db
+  image: bachboucha/challenge13-webnodb:v1.2
   replicas: 2
   service:
     port: 5000
@@ -30,7 +33,7 @@ mongodb:
   service:
     port: 27017
   volume:
-    size: "0.1Gi" 
+    size: "0.1Gi"
   resources:
     requests:
       memory: "100Mi"

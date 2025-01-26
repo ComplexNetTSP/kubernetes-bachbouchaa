@@ -4,5 +4,5 @@ metadata:
   name: mongodb-config
   namespace: nbacha
 data:
-  MONGO_HOST: "mongodb-0.mongodb"
+  MONGO_HOST: "mongodb-0.mongodb.nbacha.svc.cluster.local"
   MONGO_PORT: "27017"
