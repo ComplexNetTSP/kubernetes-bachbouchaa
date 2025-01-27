@@ -21,8 +21,16 @@ spec:
         ports:
         - containerPort: {{ .Values.webdb.service.port }}
         env:
-        - name: MONGO_URI
-          value: "mongodb://mongodb-0.mongodb.nbacha.svc.cluster.local:27017"
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-config
+              key: MONGO_HOST
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-config
+              key: MONGO_PORT
         resources:
           requests:
             memory: {{ .Values.webdb.resources.requests.memory }}
@@ -40,9 +48,9 @@ metadata:
     app: webdb
 spec:
   selector:
-    app: webdb  # Must match the labels in the deployment
+    app: webdb  
   ports:
   - protocol: TCP
-    port: {{ .Values.webdb.service.port }} # External port exposed by the service
-    targetPort: {{ .Values.webdb.service.port }} # Port on the container
+    port: {{ .Values.webdb.service.port }} # port exposé par le service
+    targetPort: {{ .Values.webdb.service.port }} # port du container
   type: ClusterIP

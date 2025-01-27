@@ -1,17 +1,15 @@
 from flask import Flask, request
 from datetime import datetime
 from pymongo import MongoClient
-import socket
 import os
+import socket
 
 app = Flask(__name__)
 
-# MongoDB Configuration
-mongo_host = os.getenv("MONGO_HOST", "localhost")
+# MongoDB Configuration from Environment Variables
+mongo_host = os.getenv("MONGO_HOST", "mongodb")
 mongo_port = os.getenv("MONGO_PORT", "27017")
-mongo_uri = f"mongodb://{mongo_host}:{mongo_port}/"
-
-client = MongoClient(mongo_uri)  # Connect to MongoDB service
+client = MongoClient(f"mongodb://{mongo_host}:{mongo_port}/")
 db = client['webapp_db']
 collection = db['requests']
 
@@ -33,7 +31,7 @@ def home():
     return f"""
     <html>
         <body>
-            <h1>Flask App with Database - Version 1.2 </h1>
+            <h1>Flask App with Database - Version 1.4</h1>
             <h1>Name: Nermine Bacha </h1>
             <p>Server: {socket.gethostname()}</p>
             <ul>{records_html}</ul>

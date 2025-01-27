@@ -8,7 +8,7 @@ def home():
     return f"""
     <html>
         <body>
-            <h1>Flask App without Database - Version 1.2</h1>
+            <h1>Flask App without Database - Version 1.3</h1>
             <h1>Name: Nermine Bacha </h1>
             <p>Server: {socket.gethostname()}</p>
         </body>
