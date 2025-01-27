@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-db-access
+  namespace: nbacha
+spec:
+  podSelector:
+    matchLabels:
+      app: mongodb  # Sélectionne uniquement les pods MongoDB
+  policyTypes:
+  - Ingress  # Restreint uniquement le trafic entrant
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: webdb  # Permet l'accès des pods webdb
+    ports:
+    - protocol: TCP
+      port: 27017  # Port utilisé par MongoDB
