@@ -4,10 +4,10 @@ metadata:
   name: mongodb
   namespace: nbacha
 spec:
+  clusterIP: None
   selector:
     app: mongodb
   ports:
-    - protocol: TCP
+    - name: mongo
       port: 27017
       targetPort: 27017
-  clusterIP: None

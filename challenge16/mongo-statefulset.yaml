@@ -5,7 +5,7 @@ metadata:
   namespace: nbacha
 spec:
   serviceName: mongodb
-  replicas: {{ .Values.mongodb.replicas }}
+  replicas: 3
   selector:
     matchLabels:
       app: mongodb
@@ -15,22 +15,29 @@ spec:
         app: mongodb
     spec:
       containers:
-        - name: mongodb
-          image: {{ .Values.mongodb.image }}
+        - name: mongo
+          image: mongo:6.0
           command:
-            - "mongod"
-            - "--replSet"
-            - "rs0"
+            - mongod
+            - "--replSet=rs0"
+            - "--bind_ip_all"
           ports:
-            - containerPort: {{ .Values.mongodb.service.port }}
+            - containerPort: 27017
           volumeMounts:
-            - name: mongo-storage
+            - name: mongo-data
               mountPath: /data/db
+          resources:
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+            limits:
+              memory: "400Mi"
+              cpu: "400m"
   volumeClaimTemplates:
     - metadata:
-        name: mongo-storage
+        name: mongo-data
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: {{ .Values.mongodb.volume.size }}
+            storage: 1Gi

@@ -1,0 +1,33 @@
+# Step 1: Connect to MongoDB Primary (mongodb-0)
+kubectl exec -it mongodb-0 -n nbacha -- mongosh
+
+# Step 2: Initialize the Replica Set
+rs.initiate({
+  _id: "rs0",
+  members: [
+    { _id: 0, host: "mongodb-0.mongodb.nbacha.svc.cluster.local:27017" },
+    { _id: 1, host: "mongodb-1.mongodb.nbacha.svc.cluster.local:27017" },
+    { _id: 2, host: "mongodb-2.mongodb.nbacha.svc.cluster.local:27017" }
+  ]
+})
+
+# Step 3: Check the Replica Set Status
+rs.status()
+
+# Step 4: Insert Test Data into MongoDB Primary
+use testDB;
+db.testCollection.insertOne({ name: "Nermine", message: "Hello from MongoDB Replica Set!" });
+
+# Step 5: Exit MongoDB Shell
+exit
+
+# Step 6: Connect to a Secondary Node
+kubectl exec -it mongodb-1 -n nbacha -- mongosh
+
+# Step 7: Enable Read Access on Secondary
+use testDB;
+rs.slaveOk();
+db.testCollection.find();
+
+# Step 8: Exit MongoDB Shell
+exit
