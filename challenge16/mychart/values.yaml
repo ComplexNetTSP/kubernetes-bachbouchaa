@@ -1,0 +1,33 @@
+webdb:
+  image: bachboucha/challenge16-webdb:1.5
+  replicas: 3
+  service:
+    port: 5000
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+  volume:
+    size: "0.5Gi"
+
+mongodb:
+  image: mongo:latest
+  replicas: 3
+  service:
+    port: 27017
+  volume:
+    size: "1Gi"
+  resources:
+    requests:
+      memory: "100Mi"
+      cpu: "100m"
+    limits:
+      memory: "200Mi"
+      cpu: "200m"
+
+ingress:
+  hostnames:
+    - webdb.nbacha.net4255.luxbulb.org

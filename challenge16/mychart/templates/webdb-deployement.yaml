@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webdb
+  namespace: nbacha
+spec:
+  replicas: {{ .Values.webdb.replicas }}
+  selector:
+    matchLabels:
+      app: webdb
+  template:
+    metadata:
+      labels:
+        app: webdb
+    spec:
+      containers:
+        - name: webdb
+          image: {{ .Values.webdb.image }}
+          ports:
+            - containerPort: {{ .Values.webdb.service.port }}
+          resources:
+            requests:
+              memory: {{ .Values.webdb.resources.requests.memory }}
+              cpu: {{ .Values.webdb.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.webdb.resources.limits.memory }}
+              cpu: {{ .Values.webdb.resources.limits.cpu }}
+          volumeMounts:
+            - name: webdb-storage
+              mountPath: /app/data
+      volumes:
+        - name: webdb-storage
+          persistentVolumeClaim:
+            claimName: webdb-pvc
